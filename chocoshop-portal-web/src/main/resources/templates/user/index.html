@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+   <head>
+      <meta charset="UTF-8">
+      <title></title>
+      <link href="/user/css/bootstrap.min.css" rel="stylesheet">
+      <script src="/user/js/jquery.min.js"></script>
+      <script src="/user/js/popper.min.js"></script>
+      <script src="/user/js/bootstrap.min.js"></script>
+      <script src="/user/js/chocoUtils.js"></script>
+      <script src="/js/js.cookie-2.2.1.min.js"></script>
+      <script>
+         var categoryChilds = []
+         $.ajax({
+            type: "get",
+            url: "/user/category/list",
+            async: true,
+            success: function(data) {
+               $(function() {
+                  var str = '';
+                  for(var i = 0; i < data.length; i++) {
+                     if(data[i].categoryParent == undefined) {
+                        str += '<a class="nav-link card" data-toggle="collapse" data-target="#c' + data[i].categoryId + '">' + data[i].categoryName + '</a>'
+                        str += '<div id="c' + data[i].categoryId + '" class="collapse" data-parent="#accordion">'
+                        str += '<ul class="navbar-nav">'
+
+                        for(var j = 0; j < data.length; j++) {
+                           if(data[j].categoryParent === data[i].categoryId) {
+                              str += '<li class="nav-item" style="margin-left: 20px;"><a href="/user/goods/show-goods?categoryId=' + data[j].categoryId + '">' + data[j].categoryName + '</a></li>'
+                              categoryChilds.push({
+                                 "categoryId": data[i].categoryId,
+                                 "categoryName": data[j].categoryName
+                              })
+                           }
+                        }
+
+                        str += '</ul>'
+                        str += '</div>'
+                     }
+                  }
+                  $('#navbarCategory').append(str)
+
+
+                  
+                  $.ajax({
+                     type: "get",
+                     url: "/user/goods/new-goods",
+                     success: function(data){
+                        for(var i = 0;i<data.length;i++){
+                           var categoryName = data[i].categoryName
+                           var goodsList = data[i].goodsList
+                           
+                        }
+                     },
+                     async: true
+                  });
+               })
+            }
+         });
+      </script>
+   </head>
+
+   <body>
+      <div id="navbar"></div>
+      <script>
+         $("#navbar").load("/user/navbar")
+      </script>
+
+      <div class="container">
+         <div class="row">
+            <div class="col-md-3">
+               <div id="accordion">
+                  <nav id="navbarCategory" class="nav flex-column accordion">
+
+                  </nav>
+               </div>
+
+            </div>
+            <div class="col-md-9">
+               <div id="carouselExampleInterval" class="carousel slide" data-ride="carousel">
+                  <div class="carousel-inner">
+                     <div class="carousel-item active" data-interval="10000">
+                        <img src="/user/img/lb1.jpg" class="d-block w-100" alt="...">
+                     </div>
+                     <div class="carousel-item" data-interval="2000">
+                        <img src="/user/img/lb2.jpg" class="d-block w-100" alt="...">
+                     </div>
+                     <div class="carousel-item">
+                        <img src="/user/img/lb3.jpg" class="d-block w-100" alt="...">
+                     </div>
+                  </div>
+                  <a class="carousel-control-prev" href="#carouselExampleInterval" role="button" data-slide="prev">
+                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                     <span class="sr-only">Previous</span>
+                  </a>
+                  <a class="carousel-control-next" href="#carouselExampleInterval" role="button" data-slide="next">
+                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                     <span class="sr-only">Next</span>
+                  </a>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <br />
+      <br />
+
+      <div class="container">
+         <!--
+         <div class="row">
+            <div class="col-md-3 border" th:each="goods : ${goodsList}">
+               <img class="img-fluid" th:src="@{${goods.goodsImageurl}}" />
+               <a th:href="@{'/user/goods/'+${goods.goodsId}}" class="goodsText" th:text="${goods.goodsTitle}"></a>
+               <span style="color: orangered; font-size: 1.5em;">￥<small th:text="${goods.goodsPrice}"></small></span>
+               <br />
+               <button th:id="${goods.goodsId}" class="btn btn-outline-success btn-sm float-md-right" style="margin: 5px;" onclick="addGoodsToCart(this,1)">加入购物车</button>
+               <br />
+
+               <div th:id="${goods.goodsId}+'Toast'" class="toast" role="alert" aria-live="assertive" aria-atomic="true" style="display: none;">
+                  <div class="toast-body">
+                     <span>添加成功</span>
+                  </div>
+               </div>
+            </div>
+
+         </div>
+         -->
+         
+         <div class="row" th:each="newGoods : ${newGoodsList}">
+            <div class="col-md-12">
+               <div th:text="${newGoods.categoryName}"></div>
+            <hr />
+            </div>
+            
+            <div class="col-md-3 border" th:each="goods : ${newGoods.goodsList}">
+               <img class="img-fluid" th:src="@{${goods.goodsImageurl}}" />
+               <a th:href="@{'/user/goods/'+${goods.goodsId}}" class="goodsText" th:text="${goods.goodsTitle}"></a>
+               <span style="color: orangered; font-size: 1.5em;">￥<small th:text="${goods.goodsPrice}"></small></span>
+               <br />
+               <button th:id="${goods.goodsId}" class="btn btn-outline-success btn-sm float-md-right" style="margin: 5px;" onclick="addGoodsToCart(this,1)">加入购物车</button>
+               <br />
+
+               <div th:id="${goods.goodsId}+'Toast'" class="toast" role="alert" aria-live="assertive" aria-atomic="true" style="display: none;">
+                  <div class="toast-body">
+                     <span>添加成功</span>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+
+   </body>
+
+</html>

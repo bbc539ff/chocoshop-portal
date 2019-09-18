@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+   <head>
+      <meta charset="UTF-8">
+      <title></title>
+      <link href="/user/css/bootstrap.min.css" rel="stylesheet">
+      <script src="/user/js/jquery.min.js"></script>
+      <script src="/user/js/popper.min.js"></script>
+      <script src="/user/js/bootstrap.min.js"></script>
+      <script src="/js/js.cookie-2.2.1.min.js"></script>
+      <script src="/user/js/chocoUtils.js"></script>
+
+   </head>
+
+   <body>
+      <div id="navbar"></div>
+      <script>
+         $("#navbar").load("/user/navbar")
+      </script>
+
+      <div class="container">
+         <div class="row" style="margin: 100px;">
+            <div class="col">
+               <form action="/user/user-info/edit" method="post">
+                  <table class="table table-striped">
+                     <tbody>
+                        <tr>
+                           <th>UUID</th>
+                           <td th:text="${member.memberUuid}"></td>
+                           <td>
+                              <img class="img-responsive" style="width: 180px;height: 180px;" th:src="@{'/upload/member/member_image/'+${member.memberUuid}+'.jpeg'}" />
+                              <input type="text" name="memberUuid" th:value="${member.memberUuid}" style="display: none;" />
+                           </td>
+                        </tr>
+                        <tr>
+                           <th>用户名</th>
+                           <td th:text="${member.memberUserName}"></td>
+                           <td>
+                              <a id="memberUserName" href="javascript:void(0)" onclick="edit(this)">编辑</a>
+                           </td>
+                        </tr>
+                        <tr>
+                           <th>手机号码</th>
+                           <td th:text="${member.memberPhone}"></td>
+                           <td>
+                              <a id="memberPhone" href="javascript:void(0)" onclick="edit(this)">编辑</a>
+                           </td>
+                        </tr>
+                        <tr>
+                           <th>电子邮箱</th>
+                           <td th:text="${member.memberEmail}"></td>
+                           <td>
+                              <a id="memberEmail" href="javascript:void(0)" onclick="edit(this)">编辑</a>
+                           </td>
+                        </tr>
+                        <tr>
+                           <th>注册时间</th>
+                           <td th:text="${member.memberCreateTime}"></td>
+                           <td></td>
+                        </tr>
+                        <tr>
+                           <th>性别</th>
+                           <td th:if="${member.memberGender == true}" value="true">男</td>
+                           <td th:if="${member.memberGender == false}" value="false">女</td>
+                           <td>
+                              <a id="memberGender" href="javascript:void(0)" onclick="radio(this)">编辑</a>
+                           </td>
+                        </tr>
+                        <tr>
+                           <th>地址</th>
+                           <td th:text="${member.memberAddress}"></td>
+                           <td>
+                              <a id="memberAddress" href="javascript:void(0)" onclick="edit(this)">编辑</a>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+                  <button class="btn btn-outline-primary">修改</button>
+               </form>
+
+            </div>
+         </div>
+      </div>
+
+      <script>
+         function edit(obj) {
+            console.log(obj)
+            $(obj).parent().html('<input type="text" name="' + obj.id + '" />')
+         }
+         
+         function radio(obj){
+            $(obj).parent().html('<input type="radio" name="memberGender" value="0"><span>女</span>'+
+               '<input type="radio" name="memberGender" value="1"><span>男</span>')
+            
+         }
+      </script>
+   </body>
+
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+   <head>
+      <meta charset="UTF-8">
+      <title>Title</title>
+      <link href="/user/css/bootstrap.min.css" rel="stylesheet">
+      <script src="/user/js/jquery.min.js"></script>
+      <script src="/user/js/popper.min.js"></script>
+      <script src="/user/js/bootstrap.min.js"></script>
+      <style>
+         .form-signin {
+            width: 100%;
+            max-width: 420px;
+            padding: 15px;
+            margin: auto;
+         }
+         
+         body {
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-align: center;
+            align-items: center;
+            padding-top: 100px;
+            padding-bottom: 40px;
+            background-color: #f5f5f5;
+         }
+      </style>
+   </head>
+
+   <body>
+      <form class="form-signin" action="/user/register" method="post" enctype="multipart/form-data">
+         <div class="text-center mb-4">
+            <h1 class="h3 mb-3 font-weight-normal">巧克力专营</h1>
+
+         </div>
+
+         <div class="form-label-group">
+            <label for="memberUserName">用户名</label>
+            <input type="text" name="memberUserName" class="form-control" placeholder="username">
+         </div>
+
+         <div class="form-label-group">
+            <label for="memberPassword">密码</label>
+            <input type="password" name="memberPassword" class="form-control" placeholder="Password">
+         </div>
+         <div class="form-label-group">
+            <label for="memberPhone">手机号码</label>
+            <input type="text" name="memberPhone" class="form-control" placeholder="Phone">
+         </div>
+         <div class="form-label-group">
+            <label for="memberGender">性别</label>
+            <div class="radio">
+               <label><input type="radio" name="memberGender" value="0"><span>女</span></label>
+               <label><input type="radio" name="memberGender" value="1"><span>男</span></label>
+            </div>
+
+         </div>
+         <div class="form-label-group">
+            <label for="memberEmail">地址</label>
+            <input class="textbox" name="memberAddress">
+         </div>
+         <div class="form-label-group">
+            <label for="validatedCustomFile">头像url</label>
+            <input type="file" name="file">
+         </div>
+
+         <button class="btn btn-lg btn-primary btn-block" type="submit">注册</button>
+         <p style="color: red;" th:text="${msg}"></p>
+         <p class="mt-5 mb-3 text-muted text-center">© 2017-2019</p>
+      </form>
+
+   </body>
+
+</html>

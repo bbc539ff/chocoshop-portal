@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+   <head>
+      <meta charset="UTF-8">
+      <title></title>
+      <link href="/user/css/bootstrap.min.css" rel="stylesheet">
+      <script src="/user/js/jquery.min.js"></script>
+      <script src="/user/js/popper.min.js"></script>
+      <script src="/user/js/bootstrap.min.js"></script>
+      <script src="/js/js.cookie-2.2.1.min.js"></script>
+      <script src="/user/js/chocoUtils.js"></script>
+
+   </head>
+
+   <body>
+      <div id="navbar"></div>
+      <script>
+         $("#navbar").load("/user/navbar")
+      </script>
+
+      <div class="container">
+         <div class="row" style="margin: 100px;">
+            <div class="col">
+               <table class="table table-striped">
+                  <tbody>
+                     <tr>
+                        <th>订单号</th>
+                        <td th:text="${order.orderUuid}"></td>
+                     </tr>
+                     <tr>
+                        <th>总金额</th>
+                        <td th:text="${order.orderPayment}"></td>
+                     </tr>
+                     <tr>
+                        <th>支付方式</th>
+                        <td th:text="${order.orderPaymentType}"></td>
+                     </tr>
+                     <tr>
+                        <th>订单状态</th>
+                        <td th:text="${order.orderStatus}"></td>
+                     </tr>
+                     <tr>
+                        <th>创建时间</th>
+                        <td th:text="${order.orderCreateTime}"></td>
+                     </tr>
+                     <tr>
+                        <th>更新时间</th>
+                        <td th:text="${order.orderUpdateTime}"></td>
+                     </tr>
+                     <tr>
+                        <th>商品列表</th>
+                        <td>
+                           <div th:each="entry : ${cartMap}">
+                              <span th:text="'商品ID：'+${entry.key}"></span>
+                              <span th:text="'数量：'+${entry.value}"></span>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+               <a th:if="${order.orderStatus < 4}" th:href="@{'consign/'+${order.orderUuid}}">确认收货</a>
+            </div>
+         </div>
+      </div>
+
+   </body>
+
+</html>
