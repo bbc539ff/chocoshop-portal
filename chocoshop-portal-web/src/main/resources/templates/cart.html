@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+   <head>
+      <meta charset="UTF-8">
+      <title></title>
+      <link href="/css/bootstrap.min.css" rel="stylesheet">
+      <script src="/js/jquery.min.js"></script>
+      <script src="/js/popper.min.js"></script>
+      <script src="/js/bootstrap.min.js"></script>
+      <script src="/js/js.cookie-2.2.1.min.js"></script>
+      <script src="/js/chocoUtils.js"></script>
+
+   </head>
+
+   <body>
+      <div id="navbar"></div>
+      <script>
+         $("#navbar").load("/navbar")
+      </script>
+
+      <div class="container">
+         <div class="row" style="margin: 100px;">
+            <div class="col">
+               <form action="/order/submit" method="post">
+                  <table class="table table-striped">
+                     <thead>
+                        <tr>
+                           <th><input type="checkbox" id="multi" />多选</th>
+                           <th>商品名</th>
+                           <th>单价</th>
+                           <th>数量</th>
+                           <th>总价</th>
+                           <th>删除</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr th:each="entry : ${goodsMap}" th:id="${entry.key.goodsId}">
+                           <td><input th:id="${entry.key.goodsPrice*entry.value}" type="checkbox" name="goodsBox" /></td>
+                           <td th:text="${entry.key.goodsTitle}"></td>
+                           <td th:text="${entry.key.goodsPrice}"></td>
+                           <td th:text="${entry.value}"></td>
+                           <td th:text="${entry.key.goodsPrice*entry.value}">3456.00</td>
+                           <td>
+                              <input name="orderPayment" th:value="${entry.key.goodsPrice*entry.value}" type="text" style="display: none;" />
+                              <a href="javascript:void(0);" th:onclick="'deleteGoodsFromCart('+${entry.key.goodsId}+')'">删除</a>
+                           </td>
+                        </tr>
+
+                     </tbody>
+                  </table>
+
+                  <div class="container">
+                     <div class="row">
+                        <div class="col-md-3">
+
+                           <div>已选择<span id="selCount">0</span>件商品</div>
+                           <br />
+                           <a href="javascript:void(0)" onclick="delAll()">删除选中商品</a>
+                        </div>
+                        <div class="offset-md-6 col-md-3">
+
+                           <div>
+                              <div><span>总价：</span><span style="color: red; font-size: 1.5em;">￥<span id="sumPrice"></span></span>
+                              </div>
+
+                              <span>支付方式：</span>
+                              <select class="form-control" name="orderPaymentType">
+                                 <option value="0">货到付款</option>
+                                 <option value="1">支付宝</option>
+                                 <option value="2">微信</option>
+                              </select>
+                           </div>
+
+                        </div>
+
+                     </div>
+                  </div>
+                  <button class="btn btn-outline-primary" onclick="generateOrder()">提交</button>
+               </form>
+
+            </div>
+         </div>
+      </div>
+      <script>
+         $('#multi').click(function() {
+            var items = $('input[name="goodsBox"]')
+
+            for(var i = 0; i < items.length; i++) {
+               var stat = $('#multi').prop("checked")
+               $(items[i]).prop("checked", stat)
+            }
+
+            sum = 0
+            var items = $('input[name="goodsBox"]')
+            $('#selCount').text(0)
+            for(var i = 0; i < items.length; i++) {
+               if($(items[i]).is(':checked')) {
+                  $('#selCount').text(parseInt($('#selCount').text()) + 1)
+                  sum += parseFloat($(items[i]).attr("id"))
+               }
+            }
+            $('#sumPrice').text(sum)
+
+         })
+
+         var sum = 0
+         var items = $('input[name="goodsBox"]')
+         for(var i = 0; i < items.length; i++) {
+            $(items[i]).click(function() {
+               if(this.checked == true) {
+                  sum += parseFloat(this.id)
+               } else {
+                  sum -= parseFloat(this.id)
+               }
+               $('#sumPrice').text(sum)
+            })
+
+            $(items[i]).change(function() {
+               if($(this).is(':checked')) {
+                  $('#selCount').text(parseInt($('#selCount').text()) + 1)
+               } else {
+                  $('#selCount').text(parseInt($('#selCount').text()) - 1)
+               }
+            })
+         }
+
+         $(function() {
+            sum = 0
+            var items = $('input[name="goodsBox"]')
+            for(var i = 0; i < items.length; i++) {
+               if($(items[i]).is(':checked')) {
+                  sum += parseFloat($(items[i]).attr("id"))
+               }
+            }
+            $('#sumPrice').text(sum)
+         })
+
+         function delAll() {
+            var items = $('input[name="goodsBox"]')
+            for(var i = 0; i < items.length; i++) {
+               if($(items[i]).is(':checked')) {
+                  var delId = $($($(items[i]).parent())).parent().attr("id")
+                  console.log(delId)
+                  deleteGoodsFromCart(delId)
+               }
+            }
+         }
+      </script>
+
+   </body>
+
+</html>

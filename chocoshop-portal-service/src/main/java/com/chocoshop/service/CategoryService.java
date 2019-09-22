@@ -42,4 +42,8 @@ public class CategoryService {
         return null;
     }
 
+    public Category getByCategoryId(Long categoryId){
+        return categoryMapper.selectByPrimaryKey(categoryId);
+    }
+
 }

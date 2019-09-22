@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+   <head>
+      <meta charset="UTF-8">
+      <title></title>
+      <link href="/css/bootstrap.min.css" rel="stylesheet">
+      <link href="/css/choco.css" rel="stylesheet">
+      <script src="/js/jquery.min.js"></script>
+      <script src="/js/popper.min.js"></script>
+      <script src="/js/bootstrap.min.js"></script>
+      <script src="/js/chocoUtils.js"></script>
+      <script src="/js/js.cookie-2.2.1.min.js"></script>
+      <script>
+         categoryNavbar()
+      </script>
+   </head>
+
+   <body style="background-color: #f0f0f0;">
+      <div id="navbar"></div>
+      <script>
+         $("#navbar").load("/navbar")
+      </script>
+
+      <div class="container">
+         <div class="row">
+            <div class="col-md-3">
+               <div id="accordion">
+                  <nav id="navbarCategory" class="nav flex-column accordion">
+
+                  </nav>
+               </div>
+
+            </div>
+            <div class="col-md-9">
+               <div id="carouselExampleInterval" class="carousel slide" data-ride="carousel">
+                  <div class="carousel-inner">
+                     <div class="carousel-item active" data-interval="10000">
+                        <img src="/img/intro.jpg" class="d-block w-100" style="height: auto;" alt="...">
+                     </div>
+
+                  </div>
+                  <a class="carousel-control-prev" href="#carouselExampleInterval" role="button" data-slide="prev">
+                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                     <span class="sr-only">Previous</span>
+                  </a>
+                  <a class="carousel-control-next" href="#carouselExampleInterval" role="button" data-slide="next">
+                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                     <span class="sr-only">Next</span>
+                  </a>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <br />
+      <br />
+
+      <div class="container">
+         <div class="row">
+            <div class="col-md-9">
+               <!-- left -->
+
+               <div class="row" th:each="newGoods : ${newGoodsList}">
+                  <div class="col-md-12">
+                     <h3 style="color: #707070; margin: 15px;" th:text="${newGoods.categoryName}">热门</h3>
+                     <hr />
+                  </div>
+
+                  <div class="col-md-4" th:each="goods : ${newGoods.goodsList}" style="background-color: #F0F0F0;padding: 10px;">
+                     <div class="shadow-sm border" style="background-color: white;">
+                        <a  th:href="@{'/goods/detail/'+${goods.goodsId}}">
+                           <img class="img-fluid" th:src="@{${goods.goodsImageurl}}" style="margin: 0px;" />
+                        </a>
+                        <div style="margin: 5px;">
+                           <a th:href="@{'/goods/detail/'+${goods.goodsId}}" class="goodsText" th:text="${goods.goodsTitle}"></a>
+                           <br /><br />
+                           <div style="position:absolute;bottom:15px;right:15px;">
+                              <div th:id="${goods.goodsId}+'Toast'" class="toast" role="alert" aria-live="assertive" aria-atomic="true" style="display: none; position: absolute;">
+                                 <div class="toast-body">
+                                    <span>添加成功</span>
+                                 </div>
+                              </div>
+
+                              <div style="color: orangered; font-size: 1.5em;">￥<small th:text="${goods.goodsPrice}"></small>
+                                 <button th:id="${goods.goodsId}" class="btn btn-outline-success btn-sm float-md-right" style="margin: 5px;" onclick="addGoodsToCart(this,1)">加入购物车</button>
+                              </div>
+
+                           </div>
+
+                        </div>
+                     </div>
+
+                  </div>
+               </div>
+
+            </div>
+            <!-- "col-md-9" -->
+            <div class="col-md-3">
+               <h3 style="color: #707070;">热门</h3>
+               <hr />
+               <div class="card m-1 shadow-sm">
+                  <div class="row">
+                     <div class="col-md-4">
+                        <img src="/upload/goods/7/0.jpeg" class="card-img" alt="..." style="width: 100px;height: 100px;">
+                     </div>
+                     <div class="col-md-7" style="margin-left: 10px;">
+                        <a class="card-title" href="#">Card title</a>
+                        <button class="btn btn-outline-success btn-sm goodsText" style="margin: 5px;position:absolute;bottom:5px;right:5px;" onclick="addGoodsToCart(this,1)">加入购物车</button>
+                     </div>
+                  </div>
+               </div>
+
+               <div class="card m-1 shadow-sm">
+                  <div class="row">
+                     <div class="col-md-4">
+                        <img src="/upload/goods/7/0.jpeg" class="card-img" alt="..." style="width: 100px;height: 100px;">
+                     </div>
+                     <div class="col-md-7" style="margin-left: 10px;">
+                        <a class="card-title" href="#">Card title</a>
+                        <button class="btn btn-outline-success btn-sm goodsText" style="margin: 5px;position:absolute;bottom:5px;right:5px;" onclick="addGoodsToCart(this,1)">加入购物车</button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <!-- "col-md-3" -->
+         </div>
+      </div>
+
+   </body>
+
+</html>

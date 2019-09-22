@@ -1,106 +1,91 @@
-// ex: paginationConfig('admin', function, function)
-function paginationConfig(obj, initEditFn, doDel) {
-   var pager = $('#dg').datagrid().datagrid('getPager'); // get the pager of datagrid
-   pager.pagination({
-      buttons: [{
-         iconCls: 'icon-search',
-         handler: function() {
-            $('#addWin').form('clear');
-            $('#aSmt').attr("onclick", "searh('" + obj + "', initEditFn, doDel)")
-            $('#addWin').window('open');
-         }
-      }, {
-         iconCls: 'icon-add',
-         handler: function() {
-            $('#addWin').form('clear');
-            $('#aSmt').attr("onclick", "doAddEdit('" + obj + "', 'add')")
-            $('#addWin').window('open');
 
-         }
-      }, {
-         iconCls: 'icon-edit',
-         handler: function() {
-            var row = $('#dg').datagrid('getSelected');
-            if(row) {
-               $('#aSmt').attr("onclick", "doAddEdit('" + obj + "', 'update')")
-               initEditFn(row)
-               $('#addWin').window('open');
-            } else {
-               $.messager.alert('Warning', '请先选择！');
-            }
-
-         }
-      }, {
-         iconCls: 'icon-remove',
-         handler: function() {
-            doDel()
-         }
-      }]
-   });
-}
-
-// ajax 提交表单 add/edit
-function doAddEdit(obj, oper) {
-   var form = $("#formAddEdit").serializeArray();
-   console.log(form)
-   var formData = new FormData()
-   for(var i = 0; i < form.length; i++) {
-      console.log(form[i])
-      if(form[i].value.trim() != "") {
-         formData.append(form[i].name, form[i].value)
-         console.log(form[i].name)
-      }
+function addGoodsToCart(obj, addNum) {
+   var goodsId = $(obj).attr("id")
+   var content = Cookies.get('shoppingCart')
+   if(content == undefined) {
+      content = ''
    }
 
+   console.log('before:' + content)
+
+   var re = new RegExp(goodsId + '/([0-9]+),')
+   var result = re.exec(content)
+   if(result != null) {
+      var num = parseInt(result[1]) + parseInt(addNum);
+      console.log(num)
+      content = content.replace(re, goodsId + '/' + num + ',')
+   } else {
+      console.log('nu:' + content)
+      content += goodsId + '/' + parseInt(addNum) + ', '
+   }
+
+   console.log('after:' + content)
+
+   Cookies.set('shoppingCart', content)
+
+   $('#' + goodsId + 'Toast').on('show.bs.toast', function() {
+      $('#' + goodsId + 'Toast').css("display", "block")
+   })
+
+   $('#' + goodsId + 'Toast').on('hidden.bs.toast', function() {
+      $('#' + goodsId + 'Toast').css("display", "none")
+   })
+
+   $('#' + goodsId + 'Toast').toast('show')
+}
+
+function deleteGoodsFromCart(goodsId) {
+   var content = Cookies.get('shoppingCart')
+   if(content != undefined) {
+      var re = new RegExp(goodsId + '/([0-9]+),')
+      content = content.replace(re, '')
+      Cookies.set('shoppingCart', content)
+
+      $('#' + goodsId).remove()
+   }
+   console.log(content)
+}
+
+function generateOrder() {
    $.ajax({
-      url: '/admin/' + obj + '-info/' + oper,
-      type: 'POST',
-      cache: false,
-      data: new FormData($('#formAddEdit')[0]),
-      processData: false,
-      contentType: false
-   }).done(function(res) {
-      $.messager.alert('Warning', '操作成功！' + oper);
-      $('#addWin').window('close');
-      $('#dg').datagrid('reload')
-   }).fail(function(res) {
-      $.messager.alert('Warning', '操作失败！' + oper);
-      $('#addWin').window('close');
+      type: "get",
+      url: "/user/order/submit",
+      async: true
    });
 }
 
-function searh(obj, initEditFn, doDel) {
-   var form = $("#formAddEdit")
-   var conf = serializeNotNull(form.serialize())
 
-   $('#dg').datagrid({
-      url: '/admin/' + obj + '-info/search?' + conf,
-      rownumbers: true,
-      singleSelect: true,
-      pagination: true,
-   })
-   paginationConfig(obj, initEditFn, doDel)
-   $('#addWin').window('close');
-}
+function categoryNavbar(){
+   var categoryChilds = []
+         $.ajax({
+            type: "get",
+            url: "/category/list",
+            async: true,
+            success: function(data) {
+               $(function() {
+                  var str = '';
+                  for(var i = 0; i < data.length; i++) {
+                     if(data[i].categoryParent == undefined) {
+                        str += '<a class="nav-link card" data-toggle="collapse" data-target="#c' + data[i].categoryId + '">' + data[i].categoryName + '</a>'
+                        str += '<div id="c' + data[i].categoryId + '" class="collapse" data-parent="#accordion">'
+                        str += '<ul class="navbar-nav">'
 
-// java Date 字符串转  easyui 日期格式
-function parseDate(value) {
-   var date = new Date(value);
-   var year = date.getFullYear();
-   var month = date.getMonth() + 1; //月份+1   
-   var day = date.getDate();
-   var hour = date.getHours();
-   var minutes = date.getMinutes();
-   var second = date.getSeconds();
-   return day + "/" + month + "/" + year + " " + hour + ":" + minutes + ":" + second;
-}
+                        for(var j = 0; j < data.length; j++) {
+                           if(data[j].categoryParent === data[i].categoryId) {
+                              str += '<li class="nav-item" style="margin-left: 20px;"><a href="/goods/result?categoryId=' + data[j].categoryId + '">' + data[j].categoryName + '</a></li>'
+                              categoryChilds.push({
+                                 "categoryId": data[i].categoryId,
+                                 "categoryName": data[j].categoryName
+                              })
+                           }
+                        }
 
-function serializeNotNull(serStr) {
-   return serStr.split("&").filter(str => !str.endsWith("=")).join("&");
-}
-
-function dateFormatter(value, index, row) {
-   var returnVal = value.replace('T', ' ')
-   var returnVal = returnVal.split(".")[0]
-   return returnVal
+                        str += '</ul>'
+                        str += '</div>'
+                     }
+                  }
+                  $('#navbarCategory').append(str)
+               })
+            }
+         });
 }

@@ -13,14 +13,12 @@ import java.io.OutputStream;
 @Controller
 public class CaptchaController {
 
-    @RequestMapping("/user/get-captcha")
+    @RequestMapping("/img/captcha")
     public void getCaptcha(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // 获得 当前请求 对应的 会话对象
         HttpSession session = request.getSession();
 
         // 从请求中获得 URI ( 统一资源标识符 )
-        String uri = request.getRequestURI();
-        System.out.println("hello : " + uri);
 
         final int width = 180; // 图片宽度
         final int height = 40; // 图片高度
@@ -32,8 +30,8 @@ public class CaptchaController {
         System.out.println("验证码内容: " + code);
 
         // 建立 uri 和 相应的 验证码 的关联 ( 存储到当前会话对象的属性中 )
-        session.setAttribute(uri, code);
+        session.setAttribute("verifyCode", code);
 
-        System.out.println(session.getAttribute(uri));
+        System.out.println(session.getAttribute("verifyCode"));
     }
 }

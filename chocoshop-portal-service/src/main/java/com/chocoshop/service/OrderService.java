@@ -53,9 +53,7 @@ public class OrderService {
         return null;
     }
 
-    public List<Order> findByMemberUuid(String memberUuid) {
-        Order order = new Order();
-        order.setMemberUuid(memberUuid);
+    public List<Order> find(Order order) {
         return orderMapper.select(order);
     }
 

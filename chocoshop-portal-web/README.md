@@ -1,0 +1,17 @@
+* /login
+* /register
+* /logout
+* /index
+* /navber
+* /member/info
+* /member/edit
+* /cart/info
+* /goods/search
+* /goods/info
+* /category/list
+* /category/search
+* /order/submit
+* /order/info
+* /order/detail/{orderUuid}
+* /order/consign/{orderUuid}
+* /order/pay/{orderUuid}
