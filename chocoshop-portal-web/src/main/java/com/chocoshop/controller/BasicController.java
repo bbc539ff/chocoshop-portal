@@ -123,7 +123,6 @@ public class BasicController {
                 for (Goods goods : goodsList) {
                     goods.setGoodsImageurl(goods.getGoodsImageurl().split(",")[0]);
                 }
-                System.out.println(category.getCategoryId() + ":" + goodsList);
                 newGoods.setGoodsList(goodsList);
                 newGoodsList.add(newGoods);
             }

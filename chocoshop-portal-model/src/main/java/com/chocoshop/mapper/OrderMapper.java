@@ -15,46 +15,46 @@ public interface OrderMapper extends tk.mybatis.mapper.common.Mapper<Order> {
             "SELECT * FROM cc_order " +
             "<where>" +
             "<if test=\"orderUuid != null\">" +
-            "order_uuid = #{orderUuid}" +
+            "order_uuid = #{orderUuid} " +
             "</if>" +
             "<if test=\"orderPayment != null\">" +
-            "AND order_payment = #{orderPayment}" +
+            "AND order_payment = #{orderPayment} " +
             "</if>" +
             "<if test=\"orderPaymentType != null\">" +
-            "AND order_payment_type = #{orderPaymentType}" +
+            "AND order_payment_type = #{orderPaymentType} " +
             "</if>" +
             "<if test=\"orderStatus != null\">" +
-            "order_status = #{orderStatus}" +
+            "AND order_status = #{orderStatus} " +
             "</if>" +
             "<if test=\"orderCreateTime != null\">" +
-            "AND DATE_FORMAT(order_create_time, '%Y-%m-%d') =  DATE_FORMAT(#{orderCreateTime}, '%Y-%m-%d')" +
+            "AND DATE_FORMAT(order_create_time, '%Y-%m-%d') =  DATE_FORMAT(#{orderCreateTime}, '%Y-%m-%d') " +
             "</if>" +
             "<if test=\"orderUpdateTime != null\">" +
-            "AND DATE_FORMAT(order_update_time, '%Y-%m-%d') =  DATE_FORMAT(#{orderUpdateTime}, '%Y-%m-%d')" +
+            "AND DATE_FORMAT(order_update_time, '%Y-%m-%d') =  DATE_FORMAT(#{orderUpdateTime}, '%Y-%m-%d') " +
             "</if>" +
             "<if test=\"orderPaymentTime != null\">" +
-            "AND DATE_FORMAT(order_payment_time, '%Y-%m-%d') =  DATE_FORMAT(#{orderPaymentTime}, '%Y-%m-%d')" +
+            "AND DATE_FORMAT(order_payment_time, '%Y-%m-%d') =  DATE_FORMAT(#{orderPaymentTime}, '%Y-%m-%d') " +
             "</if>" +
             "<if test=\"orderConsignTime != null\">" +
-            "AND DATE_FORMAT(order_consign_time, '%Y-%m-%d') =  DATE_FORMAT(#{orderConsignTime}, '%Y-%m-%d')" +
+            "AND DATE_FORMAT(order_consign_time, '%Y-%m-%d') =  DATE_FORMAT(#{orderConsignTime}, '%Y-%m-%d') " +
             "</if>" +
             "<if test=\"orderEndTime != null\">" +
-            "AND DATE_FORMAT(order_end_time, '%Y-%m-%d') =  DATE_FORMAT(#{orderEndTime}, '%Y-%m-%d')" +
+            "AND DATE_FORMAT(order_end_time, '%Y-%m-%d') =  DATE_FORMAT(#{orderEndTime}, '%Y-%m-%d') " +
             "</if>" +
             "<if test=\"orderCloseTime != null\">" +
-            "AND DATE_FORMAT(order_close_time, '%Y-%m-%d') =  DATE_FORMAT(#{orderCloseTime}, '%Y-%m-%d')" +
+            "AND DATE_FORMAT(order_close_time, '%Y-%m-%d') =  DATE_FORMAT(#{orderCloseTime}, '%Y-%m-%d') " +
             "</if>" +
             "<if test=\"orderShippingCode != null\">" +
-            "AND order_shipping_code = #{orderShippingCode}" +
+            "AND order_shipping_code = #{orderShippingCode} " +
             "</if>" +
             "<if test=\"memberUuid != null\">" +
-            "AND member_uuid = #{memberUuid}" +
+            "AND member_uuid = #{memberUuid} " +
             "</if>" +
             "<if test=\"orderGoodsList != null\">" +
-            "AND order_goods_list LIKE CONCAT('%, ', #{orderGoodsList}, '/%')" +
+            "AND order_goods_list LIKE CONCAT('%, ', #{orderGoodsList}, '/%') " +
             "</if>" +
             "</where>" +
-            "ORDER BY DESC" +
+            "ORDER BY order_update_time DESC;" +
             "</script>")
     @Results({
             @Result(property = "orderUuid", column = "order_uuid"),

@@ -1,5 +1,6 @@
 package com.chocoshop.controller;
 
+import com.chocoshop.model.Goods;
 import com.chocoshop.model.Member;
 import com.chocoshop.model.Order;
 import com.chocoshop.service.GoodsService;
@@ -36,7 +37,7 @@ public class OrderController {
         order.setOrderStatus(0);
         order.setOrderGoodsList(shoppingCart);
         orderService.addOrder(order);
-        return "redirect:/order/info";
+        return "redirect:/order/info?orderStatus=0";
     }
 
     @RequestMapping(path = "/order/info")
@@ -47,7 +48,7 @@ public class OrderController {
             order.setOrderStatus(orderStatus);
         }
         order.setMemberUuid(member.getMemberUuid());
-        List<Order> orderList = orderService.find(order);
+        List<Order> orderList = orderService.search(order);
 
         model.addAttribute("orderList", orderList);
         return "/order/order_info";
@@ -60,15 +61,19 @@ public class OrderController {
             Order order = orderService.findByUuid(orderUuid);
 
             String[] goodsList = order.getOrderGoodsList().split(",");
-            Map<String, Integer> cartMap = new LinkedHashMap<>();
+            Map<Goods, Integer> cartMap = new LinkedHashMap<>();
             for (String goods : goodsList) {
                 if ("".equals(goods.trim())) continue;
-                String key = goods.trim().split("/")[0];
+                String id = goods.trim().split("/")[0];
+                Goods key = goodsService.getGoodsById(Long.parseLong(id));
+                System.out.println(key);
                 String value = goods.trim().split("/")[1];
                 cartMap.put(key, Integer.parseInt(value));
             }
             System.out.println("detail: " + cartMap);
             System.out.println("detail: " + order);
+
+
 
             model.addAttribute("cartMap", cartMap);
             model.addAttribute("order", order);
@@ -85,7 +90,7 @@ public class OrderController {
         order.setOrderUuid(orderUuid);
         order.setOrderStatus(3);
         orderService.updateOrder(order);
-        return "redirect:/order/info";
+        return "redirect:/order/info?orderStatus=-1";
     }
 
     @RequestMapping(path = "/order/pay/{orderUuid}")
@@ -94,6 +99,6 @@ public class OrderController {
         order.setOrderUuid(orderUuid);
         order.setOrderStatus(1);
         orderService.updateOrder(order);
-        return "redirect:/order/info";
+        return "redirect:/order/info?orderStatus=2";
     }
 }

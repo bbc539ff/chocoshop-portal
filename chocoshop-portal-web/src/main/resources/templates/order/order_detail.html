@@ -5,6 +5,7 @@
       <meta charset="UTF-8">
       <title></title>
       <link href="/css/bootstrap.min.css" rel="stylesheet">
+      <link href="/css/choco.css" rel="stylesheet">
       <script src="/js/jquery.min.js"></script>
       <script src="/js/popper.min.js"></script>
       <script src="/js/bootstrap.min.js"></script>
@@ -34,7 +35,9 @@
                      </tr>
                      <tr>
                         <th>支付方式</th>
-                        <td th:text="${order.orderPaymentType}"></td>
+                        <td th:if="${order.orderPaymentType == 0}">货到付款</td>
+                        <td th:if="${order.orderPaymentType == 1}">支付宝</td>
+                        <td th:if="${order.orderPaymentType == 2}">微信</td>
                      </tr>
                      <tr>
                         <th>订单状态</th>
@@ -49,24 +52,29 @@
                      </tr>
                      <tr>
                         <th>创建时间</th>
-                        <td th:text="${order.orderCreateTime}"></td>
+                        <td th:text="${#dates.format(order.orderCreateTime, 'yyyy年MM月dd日 HH:mm:ss')}"></td>
                      </tr>
                      <tr>
                         <th>更新时间</th>
-                        <td th:text="${order.orderUpdateTime}"></td>
+                        <td th:text="${#dates.format(order.orderUpdateTime, 'yyyy年MM月dd日 HH:mm:ss')}"></td>
                      </tr>
                      <tr>
                         <th>商品列表</th>
                         <td>
-                           <div th:each="entry : ${cartMap}">
-                              <span th:text="'商品ID：'+${entry.key}"></span>
-                              <span th:text="'数量：'+${entry.value}"></span>
-                           </div>
+                           <table width="100%">
+                              <tr th:each="entry : ${cartMap}">
+                              <td><img style="width: 100px; height: 100px;" th:src="@{${#strings.substring(entry.key.goodsImageurl,0,#strings.indexOf(entry.key.goodsImageurl,','))}}" /></td>
+                              <td><a th:href="@{'/goods/detail/'+${entry.key.goodsId}}" th:text="'商品名：'+${entry.key.goodsTitle}"></a></td>
+                              <td><span class="goodsText" th:text="'单价：'+${entry.key.goodsPrice}"></span></td>
+                              <td><span th:text="'数量：'+${entry.value}"></span></td>
+                              <td><span th:text="'总价：'+${entry.key.goodsPrice}*${entry.value}"></span></td>
+                           </tr>
+                           </table>
                         </td>
                      </tr>
                   </tbody>
                </table>
-               <a th:if="${order.orderStatus < 4}" th:href="@{'consign/'+${order.orderUuid}}">确认收货</a>
+               <button class="btn btn-outline-primary" th:if="${order.orderStatus < 3}" th:href="@{'consign/'+${order.orderUuid}}">确认收货</button>
             </div>
          </div>
       </div>
