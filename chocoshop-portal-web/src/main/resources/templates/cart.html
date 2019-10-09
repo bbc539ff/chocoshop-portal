@@ -76,12 +76,18 @@
 
                      </div>
                   </div>
-                  <button class="btn btn-outline-primary" onclick="generateOrder()">提交</button>
+                  <button class="btn btn-outline-primary" onclick="generateOrder()">去结算</button>
                </form>
 
             </div>
          </div>
       </div>
+      
+      <footer id="footer"></footer>
+      <script>
+         $("#footer").load("/footer")
+      </script>
+      
       <script>
          $('#multi').click(function() {
             var items = $('input[name="goodsBox"]')

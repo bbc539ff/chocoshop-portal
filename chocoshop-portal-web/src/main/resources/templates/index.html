@@ -100,33 +100,28 @@
                <h3 style="color: #707070;">热门</h3>
                <hr />
                <div class="card m-1 shadow-sm">
-                  <div class="row">
+                  <div class="row" th:each="goods : ${hot}">
                      <div class="col-md-4">
-                        <img src="/upload/goods/7/0.jpeg" class="card-img" alt="..." style="width: 100px;height: 100px;">
+                        <img th:src="@{${goods.goodsImageurl}}" class="card-img" alt="..." style="width: 100px;height: 100px;">
                      </div>
                      <div class="col-md-7" style="margin-left: 10px;">
-                        <a class="card-title" href="#">Card title</a>
+                        <a class="card-title goodsTextSmall" th:text="${goods.goodsTitle}" th:href="@{'/goods/detail/'+${goods.goodsId}}"></a>
                         <button class="btn btn-outline-success btn-sm goodsText" style="margin: 5px;position:absolute;bottom:5px;right:5px;" onclick="addGoodsToCart(this,1)">加入购物车</button>
                      </div>
                   </div>
                </div>
 
-               <div class="card m-1 shadow-sm">
-                  <div class="row">
-                     <div class="col-md-4">
-                        <img src="/upload/goods/7/0.jpeg" class="card-img" alt="..." style="width: 100px;height: 100px;">
-                     </div>
-                     <div class="col-md-7" style="margin-left: 10px;">
-                        <a class="card-title" href="#">Card title</a>
-                        <button class="btn btn-outline-success btn-sm goodsText" style="margin: 5px;position:absolute;bottom:5px;right:5px;" onclick="addGoodsToCart(this,1)">加入购物车</button>
-                     </div>
-                  </div>
-               </div>
+               
             </div>
             <!-- "col-md-3" -->
          </div>
       </div>
 
+
+      <footer id="footer"></footer>
+      <script>
+         $("#footer").load("/footer")
+      </script>
    </body>
 
 </html>

@@ -17,10 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -81,7 +78,7 @@ public class GoodsController {
     }
 
     @RequestMapping(path = "/goods/result")
-    public String showGoods(Goods goods, Model model, HttpServletRequest request) throws InterruptedException, MemcachedException, TimeoutException, IOException {
+    public String showGoods(Goods goods, Model model, HttpServletRequest request, @RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "8") Integer pageSize) throws InterruptedException, MemcachedException, TimeoutException, IOException {
         // 限制搜索次数
         long m = 1000;
         int c = 4;
@@ -102,9 +99,10 @@ public class GoodsController {
             }
 
             // 搜索商品结果
+            PageHelper.startPage(pageNum, pageSize);
             List<Goods> result = new ArrayList<>();
             if (selected == null || "".equals(selected.trim()) || "[]".equals(selected.trim())) {
-                List<Goods> goodsList = searchByGoods(goods);
+                List<Goods> goodsList = searchByGoods(goods, pageNum, pageSize);
                 result.addAll(goodsList);
             } else {
                 ObjectMapper mapper = new ObjectMapper();
@@ -113,12 +111,14 @@ public class GoodsController {
                 for (Map<String, String> map : list) {
                     System.out.println(Long.parseLong(map.get("id")));
                     goods.setCategoryId(Long.parseLong(map.get("id")));
-                    List<Goods> goodsList = searchByGoods(goods);
+                    List<Goods> goodsList = searchByGoods(goods, pageNum, pageSize);
 
                     result.addAll(goodsList);
                 }
             }
 
+            model.addAttribute("pageNum", pageNum);
+            model.addAttribute("pageSize", pageSize);
             model.addAttribute("goodsList", result);
             List<Category> categoryList = categoryService.getAllCategory();
             model.addAttribute("categoryList", categoryList);
@@ -156,8 +156,8 @@ public class GoodsController {
         return true;
     }
 
-    public List<Goods> searchByGoods(Goods goods) throws InterruptedException, MemcachedException, TimeoutException {
-        List<Goods> goodsList = memCachedClient.get(goods.toString());
+    public List<Goods> searchByGoods(Goods goods, Integer pageNum, Integer pageSize) throws InterruptedException, MemcachedException, TimeoutException {
+        List<Goods> goodsList = memCachedClient.get(goods.toString()+pageNum+"&"+pageSize);
         if (goodsList == null) {
             goodsList = goodsService.search(goods);
             for (Goods goods1 : goodsList) {
@@ -179,5 +179,6 @@ public class GoodsController {
         model.addAttribute("goods", goods);
         return "/goods/goods_detail";
     }
+
 
 }

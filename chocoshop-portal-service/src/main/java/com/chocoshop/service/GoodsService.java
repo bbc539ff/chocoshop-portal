@@ -1,6 +1,5 @@
 package com.chocoshop.service;
 
-import com.chocoshop.mapper.CategoryMapper;
 import com.chocoshop.mapper.GoodsMapper;
 import com.chocoshop.model.Goods;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,6 @@ public class GoodsService {
         try{
             goodsMapper.insert(goods);
             Long goodsId = goodsMapper.selectOne(goods).getGoodsId();
-            System.out.println(goodsId);
             goods = new Goods();
             goods.setGoodsId(goodsId);
             return updateGoods(goods, files);
@@ -49,7 +47,6 @@ public class GoodsService {
             goods.setGoodsImageurl(path);
         }
 
-        System.out.println(goods);
         return goodsMapper.updateByPrimaryKeySelective(goods);
     }
 
@@ -60,7 +57,6 @@ public class GoodsService {
             for(int i = 0;i<files.length;i++) {
                 path += Utils.uploadSingle(files[i], "/upload/goods/detail/"+goodsId, files[i].getOriginalFilename(), true)+", ";
             }
-            System.out.println(path);
             goods.setGoodsDetailImageurl(path);
         }
         return goodsMapper.updateByPrimaryKeySelective(goods);
@@ -92,4 +88,9 @@ public class GoodsService {
     public List<Goods> newGoods(Long categoryId) {
         return goodsMapper.findByCategory(categoryId);
     }
+
+    public List<Goods> findBySellNumber(){
+        return goodsMapper.findBySellNumber();
+    }
+
 }

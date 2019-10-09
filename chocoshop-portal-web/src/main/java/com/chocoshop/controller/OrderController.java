@@ -4,6 +4,7 @@ import com.chocoshop.model.Goods;
 import com.chocoshop.model.Member;
 import com.chocoshop.model.Order;
 import com.chocoshop.service.GoodsService;
+import com.chocoshop.service.MemberService;
 import com.chocoshop.service.OrderService;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class OrderController {
 
     @Autowired
     GoodsService goodsService;
+
+    @Autowired
+    MemberService memberService;
 
     @RequestMapping(path = "/order/submit", method = RequestMethod.POST)
     public String generateOrder(@CookieValue String shoppingCart, @CookieValue String memberUuid, Order order, HttpServletResponse response) {
@@ -74,7 +78,10 @@ public class OrderController {
             System.out.println("detail: " + order);
 
 
+            String username = ((Member)SecurityUtils.getSubject().getPrincipal()).getMemberUserName();
+            Member member = memberService.findByMemberName(username);
 
+            model.addAttribute("member", member);
             model.addAttribute("cartMap", cartMap);
             model.addAttribute("order", order);
             return "/order/order_detail";

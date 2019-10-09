@@ -98,6 +98,11 @@
          </div>
 
       </div>
+      
+      <footer id="footer"></footer>
+      <script>
+         $("#footer").load("/footer")
+      </script>
 
       <script th:inline="javascript">
          $('#detail').html( /*[[${goods.goodsDetail}]]*/ )

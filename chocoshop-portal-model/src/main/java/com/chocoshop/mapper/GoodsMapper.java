@@ -1,6 +1,7 @@
 package com.chocoshop.mapper;
 
 import com.chocoshop.model.Goods;
+import com.chocoshop.model.GoodsSellNumber;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -81,4 +82,27 @@ public interface GoodsMapper extends tk.mybatis.mapper.common.Mapper<Goods> {
             @Result(property = "goodsDetailImageurl", column = "goods_detail_imageurl"),
     })
     List<Goods> findByCategory(@Param("categoryParent") Long categoryParent);
+
+    @Select("SELECT c1.*, d1.`sell_number` \n" +
+            "FROM cc_goods AS c1, cc_goods_sell_number AS d1\n" +
+            "WHERE c1.`goods_id` = d1.`goods_id` AND\n" +
+            "(\n" +
+            "   SELECT COUNT(*) FROM cc_goods AS c2, cc_goods_sell_number AS d2\n" +
+            "   WHERE c2.`goods_id` = d2.`goods_id` AND\n" +
+            "   c1.category_id = c2.category_id AND d2.sell_number <= d1.sell_number\n" +
+            ") <= 2;")
+    @Results({
+            @Result(property = "goodsId", column = "goods_id"),
+            @Result(property = "goodsTitle", column = "goods_title"),
+            @Result(property = "categoryId", column = "category_id"),
+            @Result(property = "goodsPrice", column = "goods_price"),
+            @Result(property = "goodsNumber", column = "goods_number"),
+            @Result(property = "goodsImageurl", column = "goods_imageurl"),
+            @Result(property = "goodsStatus", column = "goods_status"),
+            @Result(property = "goodsCreateTime", column = "goods_create_time"),
+            @Result(property = "goodsUpdateTime", column = "goods_update_time"),
+            @Result(property = "goodsDetail", column = "goods_detail"),
+            @Result(property = "goodsDetailImageurl", column = "goods_detail_imageurl"),
+    })
+    public List<Goods> findBySellNumber();
 }

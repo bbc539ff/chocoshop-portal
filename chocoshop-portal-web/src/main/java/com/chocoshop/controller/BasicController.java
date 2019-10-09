@@ -127,7 +127,16 @@ public class BasicController {
                 newGoodsList.add(newGoods);
             }
         }
+        List<Goods> hot = goodsService.findBySellNumber();
+        System.out.println(hot);
 
+        if(hot != null){
+            for(Goods goods : hot){
+                goods.setGoodsImageurl(goods.getGoodsImageurl().split(",")[0]);
+            }
+        }
+
+        model.addAttribute("hot", hot);
         model.addAttribute("newGoodsList", newGoodsList);
         return "/index";
     }
@@ -145,8 +154,26 @@ public class BasicController {
             response.addCookie(memberNameCookie);
         }
 
+        if (("".equals(memberUuid) || "".equals(memberName)) &&
+                !SecurityUtils.getSubject().isAuthenticated()
+        ) {
+            Cookie cookie = new Cookie("memberUuid", null);
+            cookie.setPath("/");
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
+            Cookie cookie2 = new Cookie("memberName", null);
+            cookie2.setPath("/");
+            cookie2.setMaxAge(0);
+            response.addCookie(cookie2);
+        }
+
         model.addAttribute("memberUuid", memberUuid);
         model.addAttribute("memberName", memberName);
         return "/navbar";
+    }
+
+    @RequestMapping("/footer")
+    public String footer() {
+        return "footer";
     }
 }

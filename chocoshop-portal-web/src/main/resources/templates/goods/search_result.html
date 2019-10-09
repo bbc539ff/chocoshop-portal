@@ -62,17 +62,46 @@
             <div class="col">
                <br />
                <ul class="pagination">
+                  <script th:inline="javascript">
+                     function changeURLArg(url,arg,arg_val){ 
+                         var pattern=arg+'=([^&]*)'; 
+                         var replaceText=arg+'='+arg_val; 
+                         if(url.match(pattern)){ 
+                             var tmp='/('+ arg+'=)([^&]*)/gi'; 
+                             tmp=url.replace(eval(tmp),replaceText); 
+                             return tmp; 
+                         }else{ 
+                             if(url.match('[\?]')){ 
+                                 return url+'&'+replaceText; 
+                             }else{ 
+                                 return url+'?'+replaceText; 
+                             } 
+                         } 
+                         return url+'\n'+arg+'\n'+arg_val; 
+                     }
+                     function lastPage(){
+                        location.href = changeURLArg(location.href, 'pageNum', /*[[${pageNum}-1]]*/)
+                     }
+                     function nextPage(){
+                        location.href = changeURLArg(location.href, 'pageNum', /*[[${pageNum}+1]]*/)
+                     }
+                     
+                  </script>
                   <li class="page-item">
-                     <a class="page-link" href="#">上一页</a>
+                     <a class="page-link" href="javascript:void(0)" onclick="lastPage()" >上一页</a>
                   </li>
-
                   <li class="page-item">
-                     <a class="page-link" href="#">下一页</a>
+                     <a class="page-link" href="javascript:void(0)"  onclick="nextPage()">下一页</a>
                   </li>
                </ul>
             </div>
          </div>
       </div>
+      
+      <footer id="footer"></footer>
+      <script>
+         $("#footer").load("/footer")
+      </script>
 
    </body>
 
