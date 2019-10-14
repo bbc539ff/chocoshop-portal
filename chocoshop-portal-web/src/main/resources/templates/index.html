@@ -100,7 +100,7 @@
                <h3 style="color: #707070;">热门</h3>
                <hr />
                <div class="card m-1 shadow-sm">
-                  <div class="row" th:each="goods : ${hot}">
+                  <div class="row" th:each="goods : ${hot}" style="margin-bottom: 10px;">
                      <div class="col-md-4">
                         <img th:src="@{${goods.goodsImageurl}}" class="card-img" alt="..." style="width: 100px;height: 100px;">
                      </div>

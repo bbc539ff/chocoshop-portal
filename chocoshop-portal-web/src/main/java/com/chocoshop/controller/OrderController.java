@@ -14,10 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Controller
 public class OrderController {
@@ -33,6 +30,15 @@ public class OrderController {
 
     @RequestMapping(path = "/order/submit", method = RequestMethod.POST)
     public String generateOrder(@CookieValue String shoppingCart, @CookieValue String memberUuid, Order order, HttpServletResponse response) {
+        // minus goods number
+        String[] goodsList = shoppingCart.split(",");
+        for (String goods : goodsList) {
+            if ("".equals(goods.trim())) continue;
+            String id = goods.trim().split("/")[0];
+            String value = goods.trim().split("/")[1];
+            goodsService.
+        }
+
         Cookie cookie = new Cookie("shoppingCart", "");
         cookie.setPath("/");
         response.addCookie(cookie);
@@ -96,6 +102,7 @@ public class OrderController {
         Order order = new Order();
         order.setOrderUuid(orderUuid);
         order.setOrderStatus(3);
+        order.setOrderConsignTime(new Date());
         orderService.updateOrder(order);
         return "redirect:/order/info?orderStatus=-1";
     }
@@ -105,7 +112,19 @@ public class OrderController {
         Order order = new Order();
         order.setOrderUuid(orderUuid);
         order.setOrderStatus(1);
+        order.setOrderPaymentTime(new Date());
         orderService.updateOrder(order);
-        return "redirect:/order/info?orderStatus=2";
+        return "redirect:/order/info?orderStatus=1";
     }
+
+
+    @RequestMapping(path = "/order/return/{orderUuid}")
+    public String returnGoods(@PathVariable String orderUuid) {
+        Order order = new Order();
+        order.setOrderUuid(orderUuid);
+        order.setOrderStatus(6);
+        orderService.updateOrder(order);
+        return "redirect:/order/info?orderStatus=-1";
+    }
+
 }

@@ -47,17 +47,21 @@ public class BasicController {
     @RequestMapping(path = "/login", method = RequestMethod.POST)
     public String login(HttpServletRequest request, String username, String password) {
         // login
-        if (!SecurityUtils.getSubject().isAuthenticated()) {
-            AuthenticationToken token = new UsernamePasswordToken(username, password);
-            SecurityUtils.getSubject().login(token);
+        try{
+            if (!SecurityUtils.getSubject().isAuthenticated()) {
+                AuthenticationToken token = new UsernamePasswordToken(username, password);
+                SecurityUtils.getSubject().login(token);
 
-            // handle exception
-            String exception = (String) request.getAttribute("shiroLoginFailure");
-            String msg = "";
-            if (exception != null) {
-                System.out.println("exception=" + exception);
-                return "/login";
+                // handle exception
+                String exception = (String) request.getAttribute("shiroLoginFailure");
+                String msg = "";
+                if (exception != null) {
+                    System.out.println("exception=" + exception);
+                    return "/login";
+                }
             }
+        }catch (Exception e){
+            e.printStackTrace();
         }
         return "redirect:/index";
 
@@ -128,7 +132,6 @@ public class BasicController {
             }
         }
         List<Goods> hot = goodsService.findBySellNumber();
-        System.out.println(hot);
 
         if(hot != null){
             for(Goods goods : hot){
@@ -152,11 +155,11 @@ public class BasicController {
             Cookie memberNameCookie = new Cookie("memberName", memberName);
             response.addCookie(memberUuidCookie);
             response.addCookie(memberNameCookie);
+            model.addAttribute("memberUuid", memberUuid);
+            model.addAttribute("memberName", memberName);
         }
 
-        if (("".equals(memberUuid) || "".equals(memberName)) &&
-                !SecurityUtils.getSubject().isAuthenticated()
-        ) {
+        if (!SecurityUtils.getSubject().isAuthenticated()) {
             Cookie cookie = new Cookie("memberUuid", null);
             cookie.setPath("/");
             cookie.setMaxAge(0);
@@ -165,10 +168,9 @@ public class BasicController {
             cookie2.setPath("/");
             cookie2.setMaxAge(0);
             response.addCookie(cookie2);
+            model.addAttribute("memberUuid", null);
+            model.addAttribute("memberName", null);
         }
-
-        model.addAttribute("memberUuid", memberUuid);
-        model.addAttribute("memberName", memberName);
         return "/navbar";
     }
 

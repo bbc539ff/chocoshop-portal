@@ -42,7 +42,6 @@
                            <td th:text="${entry.value}"></td>
                            <td th:text="${entry.key.goodsPrice*entry.value}">3456.00</td>
                            <td>
-                              <input name="orderPayment" th:value="${entry.key.goodsPrice*entry.value}" type="text" style="display: none;" />
                               <a href="javascript:void(0);" th:onclick="'deleteGoodsFromCart('+${entry.key.goodsId}+')'">删除</a>
                            </td>
                         </tr>
@@ -76,7 +75,8 @@
 
                      </div>
                   </div>
-                  <button class="btn btn-outline-primary" onclick="generateOrder()">去结算</button>
+                  <input name="orderPayment" id="orderPayment" value="0" type="text" style="display: none;" />
+                  <button class="btn btn-outline-primary">去结算</button>
                </form>
 
             </div>
@@ -107,7 +107,7 @@
                }
             }
             $('#sumPrice').text(sum)
-
+            $('#orderPayment').val(sum)
          })
 
          var sum = 0
@@ -120,6 +120,7 @@
                   sum -= parseFloat(this.id)
                }
                $('#sumPrice').text(sum)
+               $('#orderPayment').val(sum)
             })
 
             $(items[i]).change(function() {
@@ -140,6 +141,7 @@
                }
             }
             $('#sumPrice').text(sum)
+            $('#orderPayment').val(sum)
          })
 
          function delAll() {
