@@ -3,7 +3,7 @@
 
    <head>
       <meta charset="UTF-8">
-      <title></title>
+      <title>订单列表 - 巧克力专营</title>
       <link href="/css/bootstrap.min.css" rel="stylesheet">
       <script src="/js/jquery.min.js"></script>
       <script src="/js/popper.min.js"></script>
@@ -51,9 +51,9 @@
                         <td>
                            <div><a th:href="@{'/order/detail/'+${order.orderUuid}}">查看详情</a></div>
                            <div><a th:if="${order.orderStatus == 0}" th:href="@{'pay/'+${order.orderUuid}}">付款</a></div>
-                           <div><a th:if="${order.orderStatus == 0}" href="#">取消订单</a></div>
+                           <div><a th:if="${order.orderStatus == 0}" th:href="@{'cancel/'+${order.orderUuid}}">取消订单</a></div>
                            <div><a th:if="${order.orderStatus == 2}" th:href="@{'consign/'+${order.orderUuid}}">确认收货</a></div>
-                           <div><a th:if="${order.orderStatus >= 1 and order.orderStatus <= 4}" href="#">退货</a></div>
+                           <div><a th:if="${order.orderStatus >= 1 and order.orderStatus < 4}" th:href="@{'/order/return/'+${order.orderUuid}}">退货</a></div>
                         </td>
                      </tr>
 

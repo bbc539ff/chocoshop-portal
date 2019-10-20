@@ -1,26 +1,26 @@
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/chocoshop?serverTimezone=UTC&characterEncoding=utf-8
-    username: root
-    password: root
-    driver-class-name: com.mysql.jdbc.Driver
+    username: choco
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
   thymeleaf:
     cache: false
-    mode: LEGACYHTML5
+    mode: HTML
 
   mvc:
     static-path-pattern: /**
 
   resources:
-    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:C:\upload\
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:/home/yvo11/upload/
 
 server:
-  port: 443
+  port: 4430
   ssl:
     key-store: classpath:keystore
     key-store-password: 123456
-    keyStoreType: PKCS12
+    keyStoreType: JKS
     keyAlias: tomcat
 
 memcache:

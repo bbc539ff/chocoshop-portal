@@ -1,27 +1,7 @@
 
 function addGoodsToCart(obj, addNum) {
    var goodsId = $(obj).attr("id")
-   var content = Cookies.get('shoppingCart')
-   if(content == undefined) {
-      content = ''
-   }
-
-   console.log('before:' + content)
-
-   var re = new RegExp(goodsId + '/([0-9]+),')
-   var result = re.exec(content)
-   if(result != null) {
-      var num = parseInt(result[1]) + parseInt(addNum);
-      console.log(num)
-      content = content.replace(re, goodsId + '/' + num + ',')
-   } else {
-      console.log('nu:' + content)
-      content += goodsId + '/' + parseInt(addNum) + ', '
-   }
-
-   console.log('after:' + content)
-
-   Cookies.set('shoppingCart', content)
+   $.get(url = '/cart/add', data = {'goodsId': goodsId, 'number': addNum})
 
    $('#' + goodsId + 'Toast').on('show.bs.toast', function() {
       $('#' + goodsId + 'Toast').css("display", "block")
@@ -34,24 +14,24 @@ function addGoodsToCart(obj, addNum) {
    $('#' + goodsId + 'Toast').toast('show')
 }
 
-function deleteGoodsFromCart(goodsId) {
-   var content = Cookies.get('shoppingCart')
-   if(content != undefined) {
-      var re = new RegExp(goodsId + '/([0-9]+),')
-      content = content.replace(re, '')
-      Cookies.set('shoppingCart', content)
-
-      $('#' + goodsId).remove()
-   }
-   console.log(content)
+function deleteGoodsFromCart(goodsId, number) {
+      $.ajax({
+         type : 'get',
+         url : '/cart/del',
+         data : {'goodsId': goodsId, 'number': number},
+         async : false,
+      })
+      location.reload(true)
 }
-
-function generateOrder() {
+function deleteGoodsFromCart(goodsId) {
+   number = 1e9
    $.ajax({
-      type: "get",
-      url: "/user/order/submit",
-      async: true
-   });
+      type : 'get',
+      url : '/cart/del',
+      data : {'goodsId': goodsId, 'number': number},
+      async : false,
+   })
+   location.reload(true)
 }
 
 

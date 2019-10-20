@@ -91,7 +91,11 @@
 
                <div class="container">
                   <div class="row">
-                     <div class="col" id="detail"></div>
+                     <h3>商品详情</h3>
+                     <hr />
+                  </div>
+                  <div class="row">
+                     <div class="col" id="detail">等待商家补充...</div>
                   </div>
                </div>
             </div>
@@ -105,10 +109,12 @@
       </script>
 
       <script th:inline="javascript">
-         $('#detail').html( /*[[${goods.goodsDetail}]]*/ )
+         var detailData = /*[[${goods.goodsDetail}]]*/
+         if(detailData != undefined) $('#detail').html(detailData)
+         document.title = /*[[${goods.goodsTitle}+' - 巧克力专营']]*/
 
          var goodsImageurl = /*[[${goods.goodsImageurl}]]*/
-            var urls = goodsImageurl.split(',')
+         var urls = goodsImageurl.split(',')
          for(var i = 0; i < urls.length; i++) {
             if(urls[i].trim() == '') continue
             var url = ''

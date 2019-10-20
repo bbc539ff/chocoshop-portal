@@ -3,7 +3,7 @@
 
    <head>
       <meta charset="UTF-8">
-      <title>Title</title>
+      <title>注册 - 巧克力专营</title>
       <link href="/css/bootstrap.min.css" rel="stylesheet">
       <script src="/js/jquery.min.js"></script>
       <script src="/js/popper.min.js"></script>
@@ -37,15 +37,18 @@
 
          <div class="form-label-group">
             <label>用户名</label>
+            <span th:if="${memberUserNameMsg != null}" th:text="'  '+${memberUserNameMsg}" style="color:red;"></span>
             <input type="text" name="memberUserName" class="form-control" placeholder="username">
          </div>
 
          <div class="form-label-group">
             <label>密码</label>
+            <span th:if="${memberPasswordMsg != null}" th:text="'  '+${memberPasswordMsg}" style="color:red;"></span>
             <input type="password" name="memberPassword" class="form-control" placeholder="Password">
          </div>
          <div class="form-label-group">
             <label>手机号码</label>
+            <span th:if="${memberPhoneMsg != null}" th:text="'  '+${memberPhoneMsg}" style="color:red;"></span>
             <input type="text" name="memberPhone" class="form-control" placeholder="Phone">
          </div>
          <div class="form-label-group">
@@ -58,15 +61,14 @@
          </div>
          <div class="form-label-group">
             <label>地址</label>
-            <input class="textbox" name="memberAddress">
+            <input type="text" class="form-control" name="memberAddress">
          </div>
          <div class="form-label-group">
-            <label>头像url</label>
+            <label>上传头像</label><br/>
             <input type="file" name="file">
          </div>
-
+         <br />
          <button class="btn btn-lg btn-primary btn-block" type="submit">注册</button>
-         <p style="color: red;" th:text="${msg}"></p>
          <p class="mt-5 mb-3 text-muted text-center">© 2017-2019</p>
       </form>
 

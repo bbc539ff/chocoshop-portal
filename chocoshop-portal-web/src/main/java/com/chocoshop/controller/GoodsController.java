@@ -1,16 +1,12 @@
 package com.chocoshop.controller;
 
-import com.chocoshop.config.RequestLimit;
 import com.chocoshop.model.Category;
 import com.chocoshop.model.Goods;
-import com.chocoshop.model.Order;
-import com.chocoshop.model.json.NewGoods;
 import com.chocoshop.service.CategoryService;
 import com.chocoshop.service.GoodsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import net.rubyeye.xmemcached.MemcachedClient;
-import net.rubyeye.xmemcached.XMemcachedClient;
 import net.rubyeye.xmemcached.exception.MemcachedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,11 +19,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.Serializable;
 import java.net.URLDecoder;
 import java.util.*;
 import java.util.concurrent.TimeoutException;
-import java.util.stream.Stream;
 
 @Controller
 public class GoodsController {
@@ -42,7 +36,8 @@ public class GoodsController {
 
     final Logger logger = LoggerFactory.getLogger(getClass());
 
-    @RequestMapping("/cart/info")
+    @Deprecated
+    @RequestMapping("/cart/info/depr")
     public String shoppingCart(@CookieValue(defaultValue = "") String shoppingCart, Model model) {
         try {
             String[] str = shoppingCart.split(",");
@@ -62,7 +57,7 @@ public class GoodsController {
             e.printStackTrace();
         }
 
-        return "/cart";
+        return "cart";
     }
 
     @RequestMapping(path = "/goods/search")
@@ -122,7 +117,7 @@ public class GoodsController {
             model.addAttribute("goodsList", result);
             List<Category> categoryList = categoryService.getAllCategory();
             model.addAttribute("categoryList", categoryList);
-            return "/goods/search_result";
+            return "goods/search_result";
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -177,7 +172,7 @@ public class GoodsController {
         String categoryName = categoryService.getByCategoryId(goods.getCategoryId()).getCategoryName();
         model.addAttribute("categoryName", categoryName);
         model.addAttribute("goods", goods);
-        return "/goods/goods_detail";
+        return "goods/goods_detail";
     }
 
 

@@ -9,8 +9,8 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.Map;
 
-@WebFilter({"/user/login", "/user/register"})
-@Order(1)
+//@WebFilter({"/user/login", "/user/register"})
+//@Order(1)
 //@Component
 public class XssFilter implements Filter {
     final String[] charset = {"\"","/","\\","<",">"};

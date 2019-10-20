@@ -1,9 +1,12 @@
 package com.chocoshop.controller;
 
+
 import com.google.code.kaptcha.impl.DefaultKaptcha;
-import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
@@ -12,16 +15,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 
-import static com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY;
-
 @RestController
-@RequestMapping("/api/kaptcha")
 public class KaptchaController {
 
     @Autowired
     DefaultKaptcha defaultKaptcha;
 
-    @GetMapping("/defaultKaptcha")
+    Logger logger = LoggerFactory.getLogger(KaptchaController.class);
+
+    @GetMapping("/img/kaptcha")
     public void defaultKaptcha(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse)
             throws Exception {
         byte[] captchaChallengeAsJpeg = null;
@@ -29,8 +31,8 @@ public class KaptchaController {
         try {
             // 生产验证码字符串并保存到session中
             String createText = defaultKaptcha.createText();
-            System.out.println(createText);
-            httpServletRequest.getSession().setAttribute(KAPTCHA_SESSION_KEY, createText);
+            logger.info("captcha: "+createText);
+            httpServletRequest.getSession().setAttribute("verifyCode", createText);
             // 使用生成的验证码字符串返回一个BufferedImage对象并转为byte写入到byte数组中
             BufferedImage challenge = defaultKaptcha.createImage(createText);
             ImageIO.write(challenge, "jpg", jpegOutputStream);
@@ -51,13 +53,4 @@ public class KaptchaController {
         responseOutputStream.close();
     }
 
-    @PostMapping("/checkVerificationCode")
-    public String checkVerificationCode(@RequestParam(value = "verificationCode") String verificationCode, HttpServletRequest httpServletRequest) {
-        String verificationCodeIn = (String) httpServletRequest.getSession().getAttribute("verificationCode");
-        httpServletRequest.getSession().removeAttribute("verificationCode");
-        if (StringUtils.isEmpty(verificationCodeIn) || !verificationCodeIn.equals(verificationCode)) {
-            return "error";
-        }
-        return "success";
-    }
 }

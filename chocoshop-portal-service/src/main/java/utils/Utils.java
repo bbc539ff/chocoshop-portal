@@ -22,7 +22,7 @@ public class Utils {
                 String imgUrlSuffix = "";
                 if(!hasType) imgUrlSuffix = fileName + "." + file.getContentType().split("/")[1];
                 else imgUrlSuffix = fileName;
-                File upload = new File(ResourceUtils.getURL("file:C:/upload").getPath(), pathString);
+                File upload = new File(ResourceUtils.getURL("file:/home/yvo11/upload/").getPath(), pathString);
                 if(!upload.exists()) upload.mkdirs();
                 String UPLOAD_FOLDER = upload.getAbsolutePath();
                 String fileFullPath = UPLOAD_FOLDER + "/" + imgUrlSuffix;

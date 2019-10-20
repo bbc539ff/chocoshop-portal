@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
 import java.io.Serializable;
 import java.util.Date;
@@ -15,12 +16,12 @@ public class Member implements Serializable {
 
     @Id
     private String memberUuid;
-    @Length(min = 6, max = 16)
+    @Length(min = 6, max = 16, message = "用户名长度应为6-16")
     private String memberUserName;
     private String memberSalt;
-    @Length(min = 6, max = 16)
+    @Length(min = 6, max = 16, message = "密码长度应为6-16")
     private String memberPassword;
-    @Length(min = 11, max = 11)
+    @Length(min = 11, max = 11, message = "手机号码不合法")
     private String memberPhone;
     @Email
     private String memberEmail;

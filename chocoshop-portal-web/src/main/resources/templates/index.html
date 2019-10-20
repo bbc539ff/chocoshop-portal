@@ -3,7 +3,7 @@
 
    <head>
       <meta charset="UTF-8">
-      <title></title>
+      <title>首页 - 巧克力专营</title>
       <link href="/css/bootstrap.min.css" rel="stylesheet">
       <link href="/css/choco.css" rel="stylesheet">
       <script src="/js/jquery.min.js"></script>
@@ -100,13 +100,13 @@
                <h3 style="color: #707070;">热门</h3>
                <hr />
                <div class="card m-1 shadow-sm">
-                  <div class="row" th:each="goods : ${hot}">
+                  <div class="row" th:each="goods : ${hot}" style="margin-bottom: 10px;">
                      <div class="col-md-4">
                         <img th:src="@{${goods.goodsImageurl}}" class="card-img" alt="..." style="width: 100px;height: 100px;">
                      </div>
                      <div class="col-md-7" style="margin-left: 10px;">
                         <a class="card-title goodsTextSmall" th:text="${goods.goodsTitle}" th:href="@{'/goods/detail/'+${goods.goodsId}}"></a>
-                        <button class="btn btn-outline-success btn-sm goodsText" style="margin: 5px;position:absolute;bottom:5px;right:5px;" onclick="addGoodsToCart(this,1)">加入购物车</button>
+                        <button th:id="${goods.goodsId}" class="btn btn-outline-success btn-sm goodsText" style="margin: 5px;position:absolute;bottom:5px;right:5px;" onclick="addGoodsToCart(this,1)">加入购物车</button>
                      </div>
                   </div>
                </div>

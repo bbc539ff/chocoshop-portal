@@ -54,7 +54,7 @@ public interface OrderMapper extends tk.mybatis.mapper.common.Mapper<Order> {
             "AND order_goods_list LIKE CONCAT('%, ', #{orderGoodsList}, '/%') " +
             "</if>" +
             "</where>" +
-            "ORDER BY order_update_time DESC;" +
+            "ORDER BY order_create_time DESC;" +
             "</script>")
     @Results({
             @Result(property = "orderUuid", column = "order_uuid"),

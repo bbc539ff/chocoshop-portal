@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.DecimalMin;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -18,7 +19,7 @@ public class Order implements Serializable {
     @DecimalMin("0")
     private Double orderPayment;
     @Range(min = 0, max = 2)
-    private Integer orderPaymentType;
+    private BigDecimal orderPaymentType;
     @Range(min = 0, max = 7)
     private Integer orderStatus;
     private Date orderCreateTime;
@@ -47,11 +48,11 @@ public class Order implements Serializable {
         this.orderPayment = orderPayment;
     }
 
-    public Integer getOrderPaymentType() {
+    public BigDecimal getOrderPaymentType() {
         return orderPaymentType;
     }
 
-    public void setOrderPaymentType(Integer orderPaymentType) {
+    public void setOrderPaymentType(BigDecimal orderPaymentType) {
         this.orderPaymentType = orderPaymentType;
     }
 

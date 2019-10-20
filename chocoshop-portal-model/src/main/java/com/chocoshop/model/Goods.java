@@ -8,6 +8,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -19,7 +20,7 @@ public class Goods implements Serializable {
     private String goodsTitle;
     private Long categoryId;
     @DecimalMin("0")
-    private Double goodsPrice;
+    private BigDecimal goodsPrice;
     @Min(0)
     private Integer goodsNumber;
     private String goodsImageurl;
@@ -53,11 +54,11 @@ public class Goods implements Serializable {
         this.categoryId = categoryId;
     }
 
-    public Double getGoodsPrice() {
+    public BigDecimal getGoodsPrice() {
         return goodsPrice;
     }
 
-    public void setGoodsPrice(Double goodsPrice) {
+    public void setGoodsPrice(BigDecimal goodsPrice) {
         this.goodsPrice = goodsPrice;
     }
 

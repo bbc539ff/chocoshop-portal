@@ -3,7 +3,7 @@
 
    <head>
       <meta charset="UTF-8">
-      <title></title>
+      <title>购物车 - 巧克力专营</title>
       <link href="/css/bootstrap.min.css" rel="stylesheet">
       <script src="/js/jquery.min.js"></script>
       <script src="/js/popper.min.js"></script>
@@ -39,10 +39,9 @@
                            <td><input th:id="${entry.key.goodsPrice*entry.value}" type="checkbox" name="goodsBox" /></td>
                            <td th:text="${entry.key.goodsTitle}"></td>
                            <td th:text="${entry.key.goodsPrice}"></td>
-                           <td th:text="${entry.value}"></td>
-                           <td th:text="${entry.key.goodsPrice*entry.value}">3456.00</td>
+                           <td name="goodsNum" th:text="${entry.value}"></td>
+                           <td th:text="${entry.key.goodsPrice*entry.value}"></td>
                            <td>
-                              <input name="orderPayment" th:value="${entry.key.goodsPrice*entry.value}" type="text" style="display: none;" />
                               <a href="javascript:void(0);" th:onclick="'deleteGoodsFromCart('+${entry.key.goodsId}+')'">删除</a>
                            </td>
                         </tr>
@@ -76,7 +75,9 @@
 
                      </div>
                   </div>
-                  <button class="btn btn-outline-primary" onclick="generateOrder()">去结算</button>
+                  <input name="orderPayment" id="orderPayment" value="0" type="text" style="display: none;" />
+                  <input style="display: none" id="checkedGoodsId" name="checkedGoodsId" />
+                  <button class="btn btn-outline-primary" onclick="submitOrder()">去结算</button>
                </form>
 
             </div>
@@ -89,6 +90,21 @@
       </script>
       
       <script>
+
+         // 提交订单
+         function submitOrder(){
+            var checkedGoodsId = []
+            var items = $('input[name="goodsBox"]')
+            for(var i = 0; i < items.length; i++) {
+               if($(items[i]).prop("checked") == true){
+                  var id = parseInt($($($(items[i]).parent())).parent().attr("id"))
+                  checkedGoodsId.push(parseInt(id))
+               }
+            }
+            var jsonData = JSON.stringify(checkedGoodsId)
+            $('#checkedGoodsId').val(jsonData)
+         }
+
          $('#multi').click(function() {
             var items = $('input[name="goodsBox"]')
 
@@ -107,7 +123,7 @@
                }
             }
             $('#sumPrice').text(sum)
-
+            $('#orderPayment').val(sum)
          })
 
          var sum = 0
@@ -120,6 +136,7 @@
                   sum -= parseFloat(this.id)
                }
                $('#sumPrice').text(sum)
+               $('#orderPayment').val(sum)
             })
 
             $(items[i]).change(function() {
@@ -140,6 +157,7 @@
                }
             }
             $('#sumPrice').text(sum)
+            $('#orderPayment').val(sum)
          })
 
          function delAll() {
@@ -147,10 +165,16 @@
             for(var i = 0; i < items.length; i++) {
                if($(items[i]).is(':checked')) {
                   var delId = $($($(items[i]).parent())).parent().attr("id")
-                  console.log(delId)
-                  deleteGoodsFromCart(delId)
+                  console.log('delId: '+delId)
+                  $.ajax({ 
+                     type : 'get', 
+                     url : '/cart/del', 
+                     data : {'goodsId': delId, 'number': 1e9}, 
+                     async : false,
+                  })
                }
             }
+            location.reload(true)
          }
       </script>
 

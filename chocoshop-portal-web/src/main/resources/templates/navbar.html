@@ -32,11 +32,11 @@
             <li class="nav-item dropdown">
                <a class="nav-link dropdown-toggle" id="usernav" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">用户</a>
                <div class="dropdown-menu" aria-labelledby="usernav">
-                  <a th:if="${memberUuid == ''}" class="dropdown-item" href="/login">登录</a>
-                  <a th:if="${memberUuid == ''}" class="dropdown-item" href="/register">注册</a>
+                  <a th:if="${session.memberUuid == '' or session.memberUuid == null}" class="dropdown-item" href="/login">登录</a>
+                  <a th:if="${session.memberUuid == '' or session.memberUuid == null}" class="dropdown-item" href="/register">注册</a>
 
-                  <a th:if="${memberUuid != ''}" th:text="${memberName}" class="dropdown-item" href="/member/info"></a>
-                  <a th:if="${memberUuid != ''}" class="dropdown-item" href="javascript:void(0);" onclick="logout()">注销</a>
+                  <a th:if="${session.memberUuid != '' and session.memberUuid != null}" th:text="${session.memberName}" class="dropdown-item" href="/member/info"></a>
+                  <a th:if="${session.memberUuid != '' and session.memberUuid != null}" class="dropdown-item" href="javascript:void(0);" onclick="logout()">注销</a>
                </div>
             </li>
          </ul>
