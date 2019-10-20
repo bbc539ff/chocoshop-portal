@@ -17,7 +17,7 @@ public class Order implements Serializable {
     @Id
     private String orderUuid;
     @DecimalMin("0")
-    private Double orderPayment;
+    private BigDecimal orderPayment;
     @Range(min = 0, max = 2)
     private BigDecimal orderPaymentType;
     @Range(min = 0, max = 7)
@@ -40,11 +40,11 @@ public class Order implements Serializable {
         this.orderUuid = orderUuid;
     }
 
-    public Double getOrderPayment() {
+    public BigDecimal getOrderPayment() {
         return orderPayment;
     }
 
-    public void setOrderPayment(Double orderPayment) {
+    public void setOrderPayment(BigDecimal orderPayment) {
         this.orderPayment = orderPayment;
     }
 
